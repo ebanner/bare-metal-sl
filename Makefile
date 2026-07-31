@@ -4,10 +4,13 @@ debug: os.img
 run: os.img
 	qemu-system-i386 -monitor stdio os.img
 
-boot_sector_asm.o: boot_sector.asm
-	nasm -f elf32 -g -F dwarf boot_sector.asm -o boot_sector_asm.o
+src/boot_sector_asm.o: src/boot_sector.asm
+	nasm -f elf32 -g -F dwarf src/boot_sector.asm -o src/boot_sector_asm.o
 
-boot_sector_c.o: boot_sector.c
+LIB_SRC := $(wildcard src/lib/*.c)
+LIB_OBJ := $(LIB_SRC:.c=.o)
+
+src/boot_sector_c.o: src/boot_sector.c
 	i686-elf-gcc \
 		-m32 \
 		-ffreestanding \
@@ -16,26 +19,10 @@ boot_sector_c.o: boot_sector.c
 		-nostdlib \
 		-O0 \
 		-g \
-		-c boot_sector.c \
-		-o boot_sector_c.o
+		-c src/boot_sector.c \
+		-o src/boot_sector_c.o
 
-doomgeneric/m_random.o: doomgeneric/m_random.c doomgeneric/m_random.h doomgeneric/doomtype.h
-	i686-elf-gcc \
-		-m32 \
-		-std=c99 \
-		-ffreestanding \
-		-fno-pic \
-		-fno-stack-protector \
-		-nostdlib \
-        -nostdinc \
-        -Ilibc \
-        -fno-builtin \
-		-O0 \
-		-g \
-		-c doomgeneric/m_random.c \
-		-o doomgeneric/m_random.o
-
-doomgeneric/main.o: doomgeneric/main.c doomgeneric/m_random.h doomgeneric/doomtype.h
+src/lib/%.o: src/lib/%.c
 	i686-elf-gcc \
 		-m32 \
 		-std=c99 \
@@ -43,23 +30,39 @@ doomgeneric/main.o: doomgeneric/main.c doomgeneric/m_random.h doomgeneric/doomty
 		-fno-pic \
 		-fno-stack-protector \
 		-nostdlib \
-        -nostdinc \
-        -Ilibc \
-        -fno-builtin \
+		-nostdinc \
+		-Isrc/libc \
+		-fno-builtin \
 		-O0 \
 		-g \
-		-c doomgeneric/main.c \
-		-o doomgeneric/main.o
+		-c $< \
+		-o $@
 
-os.elf: boot_sector_asm.o boot_sector_c.o doomgeneric/m_random.o doomgeneric/main.o
+src/sl/sl.o: src/sl/sl.c
+	i686-elf-gcc \
+		-m32 \
+		-std=c99 \
+		-ffreestanding \
+		-fno-pic \
+		-fno-stack-protector \
+		-nostdlib \
+		-nostdinc \
+		-Isrc/lib \
+		-fno-builtin \
+		-O0 \
+		-g \
+		-c src/sl/sl.c \
+		-o src/sl/sl.o \
+
+os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ) src/sl/sl.o
 	i686-elf-ld \
 		-m elf_i386 \
 		-T link.ld \
 		-o os.elf \
-		boot_sector_asm.o \
-		boot_sector_c.o \
-		doomgeneric/m_random.o \
-		doomgeneric/main.o
+		src/boot_sector_asm.o \
+		src/boot_sector_c.o \
+		$(LIB_OBJ) \
+		src/sl/sl.o
 
 os.img: os.elf
 	i686-elf-objcopy -O binary os.elf os.img
@@ -69,4 +72,4 @@ docker:
 	docker run -it --rm -v $(CURDIR):/src doom-os
 
 clean:
-	rm -f *.o *.elf *.bin *.img doomgeneric/*.o
+	rm -f src/*.o *.elf *.bin *.img src/*.o src/lib/*.o src/sl/*.o
