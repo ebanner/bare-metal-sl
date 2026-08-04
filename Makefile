@@ -41,31 +41,31 @@ src/lib/%.o: src/lib/%.c
 		-c $< \
 		-o $@
 
-# src/sl/sl.o: src/sl/sl.c
-# 	i686-elf-gcc \
-# 		-m32 \
-# 		-std=c99 \
-# 		-ffreestanding \
-# 		-fno-pic \
-# 		-fno-stack-protector \
-# 		-nostdlib \
-# 		-nostdinc \
-# 		-Isrc/lib \
-# 		-fno-builtin \
-# 		-O0 \
-# 		-g \
-# 		-c src/sl/sl.c \
-# 		-o src/sl/sl.o
+src/sl/sl.o: src/sl/sl.c
+	i686-elf-gcc \
+		-m32 \
+		-std=c99 \
+		-ffreestanding \
+		-fno-pic \
+		-fno-stack-protector \
+		-nostdlib \
+		-nostdinc \
+		-Isrc/lib \
+		-fno-builtin \
+		-O0 \
+		-g \
+		-c src/sl/sl.c \
+		-o src/sl/sl.o
 
-os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ) #src/sl/sl.o
+os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ) src/sl/sl.o
 	i686-elf-ld \
 		-m elf_i386 \
 		-T link.ld \
 		-o os.elf \
 		src/boot_sector_asm.o \
 		src/boot_sector_c.o \
-		$(LIB_OBJ) #\
-		# src/sl/sl.o
+		$(LIB_OBJ) \
+		src/sl/sl.o
 
 os.img: os.elf
 	i686-elf-objcopy -O binary os.elf os.img
