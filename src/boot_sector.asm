@@ -1,8 +1,7 @@
 ; External function declarations
 
 global _start, isr_handler
-extern write_idt
-extern main
+extern write_idt, write_char
 
 [bits 16]
 _start:
@@ -18,6 +17,7 @@ _start:
     mov bx, 0x7e00 ; Buffer to store read data
     int 0x13       ; BIOS interrupt for disk operations
     
+pm_entry:
     ; --- Enter protected mode ---
     cli
     lgdt [gdt_ptr]
@@ -50,7 +50,10 @@ protected_mode_entry:
     ; Re-enable interrupts now that IDT is set up
     sti
 
-    call main
+    ; mov byte [0xb8000], 'A'   ; character
+    ; mov byte [0xb8001], 0x0F  ; white on black
+
+    call write_char
 
     jmp $
 
