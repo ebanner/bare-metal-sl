@@ -1,5 +1,5 @@
 debug: os.img
-	qemu-system-i386 -S -s -monitor stdio -vga std -display cocoa,zoom-to-fit=on os.img
+	qemu-system-i386 -S -s -monitor stdio os.img
 
 run: os.img
 	qemu-system-i386 -s -monitor stdio os.img
@@ -41,14 +41,31 @@ src/lib/%.o: src/lib/%.c
 		-c $< \
 		-o $@
 
-os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ)
+src/sl/sl.o: src/sl/sl.c
+	i686-elf-gcc \
+		-m32 \
+		-std=c99 \
+		-ffreestanding \
+		-fno-pic \
+		-fno-stack-protector \
+		-nostdlib \
+		-nostdinc \
+		-Isrc/lib \
+		-fno-builtin \
+		-O0 \
+		-g \
+		-c src/sl/sl.c \
+		-o src/sl/sl.o \
+
+os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ) src/sl/sl.o
 	i686-elf-ld \
 		-m elf_i386 \
 		-T link.ld \
 		-o os.elf \
 		src/boot_sector_asm.o \
 		src/boot_sector_c.o \
-		$(LIB_OBJ)
+		$(LIB_OBJ) \
+		src/sl/sl.o
 
 os.img: os.elf
 	i686-elf-objcopy -O binary os.elf os.img
@@ -58,4 +75,4 @@ docker:
 	docker run -it --rm -v $(CURDIR):/src doom-os
 
 clean:
-	rm -f src/*.o *.elf *.bin *.img src/*.o src/lib/*.o
+	rm -f src/*.o *.elf *.bin *.img src/*.o src/lib/*.o src/sl/*.o
