@@ -1,4 +1,4 @@
-// boot_sector.c — C code in the initial 512 mb boot sector
+// boot.c — C code in the initial 512 mb boot sector
 
 extern void isr_handler(void);
 
@@ -36,6 +36,8 @@ void write_idt(void) {
 }
 
 void write_char(void) {
+    /* mvaddch(0, 0, 'A'); */
+
     volatile unsigned short *vga = (volatile unsigned short *)0xB8000;
     
     vga[0] = 0x0F00 | 'E'; /* 0x0F00 is white on black */

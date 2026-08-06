@@ -5,19 +5,19 @@ SECTIONS {
   . = 0x7C00;
 
   .text : {
-    src/boot_sector*(.text*)
+    src/boot*(.text*)
   }
 
   .rodata : {
-    src/boot_sector*(.rodata*)
+    src/boot*(.rodata*)
   }
 
   .data : {
-    src/boot_sector*(.data*)
+    src/boot*(.data*)
   }
 
   .bss : {
-    src/boot_sector*(.bss*) src/boot_sector*(COMMON)
+    src/boot*(.bss*) src/boot*(COMMON)
   }
 
   /* Pad to 510 bytes and add boot signature */

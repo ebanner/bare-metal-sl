@@ -7,13 +7,13 @@ run: os.img
 run: os.img
 	qemu-system-i386 -monitor stdio os.img
 
-src/boot_sector_asm.o: src/boot_sector.asm
-	nasm -f elf32 -g -F dwarf src/boot_sector.asm -o src/boot_sector_asm.o
+src/boot_asm.o: src/boot.asm
+	nasm -f elf32 -g -F dwarf src/boot.asm -o src/boot_asm.o
 
 LIB_SRC := $(wildcard src/lib/*.c)
 LIB_OBJ := $(LIB_SRC:.c=.o)
 
-src/boot_sector_c.o: src/boot_sector.c
+src/boot_c.o: src/boot.c
 	i686-elf-gcc \
 		-m32 \
 		-ffreestanding \
@@ -22,8 +22,8 @@ src/boot_sector_c.o: src/boot_sector.c
 		-nostdlib \
 		-O0 \
 		-g \
-		-c src/boot_sector.c \
-		-o src/boot_sector_c.o
+		-c src/boot.c \
+		-o src/boot_c.o
 
 src/lib/%.o: src/lib/%.c
 	i686-elf-gcc \
@@ -41,31 +41,31 @@ src/lib/%.o: src/lib/%.c
 		-c $< \
 		-o $@
 
-src/sl/sl.o: src/sl/sl.c
-	i686-elf-gcc \
-		-m32 \
-		-std=c99 \
-		-ffreestanding \
-		-fno-pic \
-		-fno-stack-protector \
-		-nostdlib \
-		-nostdinc \
-		-Isrc/lib \
-		-fno-builtin \
-		-O0 \
-		-g \
-		-c src/sl/sl.c \
-		-o src/sl/sl.o
+# src/sl/sl.o: src/sl/sl.c
+# 	i686-elf-gcc \
+# 		-m32 \
+# 		-std=c99 \
+# 		-ffreestanding \
+# 		-fno-pic \
+# 		-fno-stack-protector \
+# 		-nostdlib \
+# 		-nostdinc \
+# 		-Isrc/lib \
+# 		-fno-builtin \
+# 		-O0 \
+# 		-g \
+# 		-c src/sl/sl.c \
+# 		-o src/sl/sl.o
 
-os.elf: src/boot_sector_asm.o src/boot_sector_c.o $(LIB_OBJ) src/sl/sl.o
+os.elf: src/boot_asm.o src/boot_c.o $(LIB_OBJ) #src/sl/sl.o
 	i686-elf-ld \
 		-m elf_i386 \
 		-T link.ld \
 		-o os.elf \
-		src/boot_sector_asm.o \
-		src/boot_sector_c.o \
-		$(LIB_OBJ) \
-		src/sl/sl.o
+		src/boot_asm.o \
+		src/boot_c.o \
+		$(LIB_OBJ) #\
+		# src/sl/sl.o
 
 os.img: os.elf
 	i686-elf-objcopy -O binary os.elf os.img
