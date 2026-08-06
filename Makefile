@@ -25,6 +25,18 @@ src/boot_c.o: src/boot.c
 		-c src/boot.c \
 		-o src/boot_c.o
 
+src/init.o: src/init.c
+	i686-elf-gcc \
+		-m32 \
+		-ffreestanding \
+		-fno-pic \
+		-fno-stack-protector \
+		-nostdlib \
+		-O0 \
+		-g \
+		-c src/init.c \
+		-o src/init.o
+
 src/lib/%.o: src/lib/%.c
 	i686-elf-gcc \
 		-m32 \
@@ -57,13 +69,14 @@ src/lib/%.o: src/lib/%.c
 # 		-c src/sl/sl.c \
 # 		-o src/sl/sl.o
 
-os.elf: src/boot_asm.o src/boot_c.o $(LIB_OBJ) #src/sl/sl.o
+os.elf: src/boot_asm.o src/boot_c.o src/init.o $(LIB_OBJ) #src/sl/sl.o
 	i686-elf-ld \
 		-m elf_i386 \
 		-T link.ld \
 		-o os.elf \
 		src/boot_asm.o \
 		src/boot_c.o \
+		src/init.o \
 		$(LIB_OBJ) #\
 		# src/sl/sl.o
 

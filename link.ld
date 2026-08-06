@@ -26,4 +26,21 @@ SECTIONS {
   .bootsig : {
     SHORT(0xAA55)
   }
+  
+  .text : {
+    src/init*(.text*)
+  }
+
+  .rodata : {
+    src/init*(.rodata*)
+  }
+
+  .data : {
+    src/init*(.data*)
+  }
+
+  .bss : {
+    src/init*(.bss*) src/init*(COMMON)
+  }
+
 }
