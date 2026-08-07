@@ -1,6 +1,8 @@
 #include <curses.h>
 
 void write_welcome_message(void) {
+    initscr();
+
     mvaddch(0, 0,  'W');
     mvaddch(0, 1,  'e');
     mvaddch(0, 2,  'l');
@@ -17,7 +19,8 @@ void write_welcome_message(void) {
     mvaddch(0, 13, 'D');
     mvaddch(0, 14, 'I');
     mvaddch(0, 15, 'E');
-    mvaddch(0, 16, 'O');
-    mvaddch(0, 17, 'S');
-    mvaddch(0, 18, '.');
+    mvaddch(0, 16, ' ');
+    mvaddch(0, 17, 'O');
+    mvaddch(0, 18, 'S');
+    mvaddch(0, 19, '.');
 }

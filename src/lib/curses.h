@@ -3,4 +3,8 @@
 #define COLS 80
 #define LINES 25
 
+#define OK (0)
+
 int mvaddch(int y, int x, const char ch);
+
+void initscr();
