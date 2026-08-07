@@ -1,17 +1,23 @@
-void write_char(void) {
-    /* mvaddch(0, 0, 'A'); */
+#include <curses.h>
 
-    volatile unsigned short *vga = (volatile unsigned short *)0xB8000;
-    
-    vga[0] = 0x0F00 | 'E'; /* 0x0F00 is white on black */
-
-    vga[80] = 0x0F00 | 'D'; /* 0x0F00 is white on black */
-
-    // volatile unsigned char *vga = (volatile unsigned char *)0xB8000;
-
-    // vga[0] = 'A';   /* character */
-    // vga[1] = 0x0F;  /* white on black */
-
-    // vga[160] = 'E';   /* character */
-    // vga[161] = 0x0F;   /* character */
+void write_welcome_message(void) {
+    mvaddch(0, 0,  'W');
+    mvaddch(0, 1,  'e');
+    mvaddch(0, 2,  'l');
+    mvaddch(0, 3,  'c');
+    mvaddch(0, 4,  'o');
+    mvaddch(0, 5,  'm');
+    mvaddch(0, 6,  'e');
+    mvaddch(0, 7,  ' ');
+    mvaddch(0, 8,  't');
+    mvaddch(0, 9,  'o');
+    mvaddch(0, 10, ' ');
+    mvaddch(0, 11, 'E');
+    mvaddch(0, 12, 'D');
+    mvaddch(0, 13, 'D');
+    mvaddch(0, 14, 'I');
+    mvaddch(0, 15, 'E');
+    mvaddch(0, 16, 'O');
+    mvaddch(0, 17, 'S');
+    mvaddch(0, 18, '.');
 }

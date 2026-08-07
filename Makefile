@@ -32,6 +32,7 @@ src/init.o: src/init.c
 		-fno-pic \
 		-fno-stack-protector \
 		-nostdlib \
+		-Isrc/lib \
 		-O0 \
 		-g \
 		-c src/init.c \
@@ -46,7 +47,6 @@ src/lib/%.o: src/lib/%.c
 		-fno-stack-protector \
 		-nostdlib \
 		-nostdinc \
-		-Isrc/libc \
 		-fno-builtin \
 		-O0 \
 		-g \

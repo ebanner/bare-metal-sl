@@ -1,7 +1,7 @@
 ; External function declarations
 
 global _start, isr_handler
-extern write_idt, write_char
+extern write_idt, write_welcome_message
 
 [bits 16]
 _start:
@@ -53,7 +53,7 @@ protected_mode_entry:
     ; mov byte [0xb8000], 'A'   ; character
     ; mov byte [0xb8001], 0x0F  ; white on black
 
-    call write_char
+    call write_welcome_message
 
     jmp $
 
