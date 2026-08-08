@@ -7,4 +7,6 @@
 
 int mvaddch(int y, int x, const char ch);
 
-void initscr();
+void initscr(void);
+
+int noecho(void) {};
