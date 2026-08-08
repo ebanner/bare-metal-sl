@@ -3,4 +3,4 @@
 
 typedef void (*sighandler_t)(int);
 
-sighandler_t signal(int sig, sighandler_t handler) {};
+sighandler_t signal(int sig, sighandler_t handler) { }
