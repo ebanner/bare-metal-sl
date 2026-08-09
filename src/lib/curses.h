@@ -12,3 +12,5 @@ void initscr(void);
 int noecho(void) { return OK; }
 
 int curs_set(int visibility) { return OK; }
+
+int getch(void) { return ERR; }
