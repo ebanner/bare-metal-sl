@@ -7,6 +7,9 @@ typedef struct WINDOW WINDOW;
 
 #define OK (0)
 
+#define TRUE 1
+#define FALSE 0
+
 static WINDOW* stdscr;
 
 int mvaddch(int y, int x, const char ch);
