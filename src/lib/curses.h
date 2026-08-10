@@ -30,3 +30,5 @@ int nodelay(WINDOW *win, int bf) { return OK; }
 int leaveok(WINDOW *win, int bf) { return OK; }
 
 int scrollok(WINDOW *win, int bf) { return OK; }
+
+int refresh(void) { return OK; }
