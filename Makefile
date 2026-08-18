@@ -41,7 +41,6 @@ src/init.o: src/init.c
 src/lib/%.o: src/lib/%.c
 	i686-elf-gcc \
 		-m32 \
-		-std=c99 \
 		-ffreestanding \
 		-fno-pic \
 		-fno-stack-protector \
@@ -51,7 +50,8 @@ src/lib/%.o: src/lib/%.c
 		-O0 \
 		-g \
 		-c $< \
-		-o $@
+		-o $@ \
+		# -std=c99 \
 
 # src/sl/sl.o: src/sl/sl.c
 # 	i686-elf-gcc \
