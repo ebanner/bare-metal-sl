@@ -10,11 +10,16 @@ static inline unsigned char inb(unsigned short port) {
     return ret;
 }
 
-int usleep(useconds_t usec) {
-    unsigned int divisor = (1193182 * (usec / 1000)) / 1000; // crude, only works for coarse values
+int __usleep(useconds_t usec) {
+    /*
+     *
+     * usec <= 1,000,000
+     *
+    */
+    unsigned long long divisor = (1193182 * (usec / 1000)) / 1000; // crude, only works for coarse values
 
     while (divisor > 0) {
-        /*  
+        /*
         * Set the PIC to count down
         *
         */
@@ -37,4 +42,13 @@ int usleep(useconds_t usec) {
 
         divisor -= chunk;
     }
+}
+
+int usleep(useconds_t usec) {
+    while (usec > 1000000) {
+        __usleep(1000000);
+        usec -= 1000000;
+    }
+
+    __usleep(usec);
 }
