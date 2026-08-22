@@ -19,20 +19,14 @@ int mvaddch(int y, int x, const char ch);
 
 void initscr(void);
 
-int noecho(void) { return OK; }
+/* No-ops */
 
-int curs_set(int) { return OK; }
-
-int getch(void) { return ERR; }
-
-int nodelay(WINDOW*, int) { return OK; }
-
-int leaveok(WINDOW*, int) { return OK; }
-
-int scrollok(WINDOW*, int) { return OK; }
-
-int refresh(void) { return OK; }
-
-int mvcur(int, int, int, int) { return OK; }
-
-int endwin(void) { return OK; }
+int noecho(void);
+int curs_set(int);
+int getch(void);
+int nodelay(WINDOW*, int);
+int leaveok(WINDOW*, int);
+int scrollok(WINDOW*, int);
+int refresh(void);
+int mvcur(int, int, int, int);
+int endwin(void);

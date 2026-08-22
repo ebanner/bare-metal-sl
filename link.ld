@@ -6,16 +6,16 @@ SECTIONS {
 
   . = 0x7C00;
 
-  .text : {
+  .boot.text : {
     src/boot*(.text*)
   }
-  .rodata : {
+  .boot.rodata : {
     src/boot*(.rodata*)
   }
-  .data : {
+  .boot.data : {
     src/boot*(.data*)
   }
-  .bss : {
+  .boot.bss : {
     src/boot*(.bss*) src/boot*(COMMON)
   }
 
