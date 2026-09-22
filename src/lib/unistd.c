@@ -1,5 +1,7 @@
 #include "unistd.h"
 
+#include "curses.h"
+
 static inline void outb(unsigned short port, unsigned char val) {
     asm volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
 }
@@ -9,6 +11,17 @@ static inline unsigned char inb(unsigned short port) {
     asm volatile ("inb %1, %0" : "=a"(ret) : "Nd"(port));
     return ret;
 }
+
+static unsigned int CURSOR = 0;
+
+void putchar(const char c) {
+    int y = CURSOR / 80; 
+    int x = CURSOR % 80; 
+  
+    mvaddch(y, x, c); 
+  
+    CURSOR += 1;
+  }
 
 int __usleep(useconds_t usec) {
     /*
@@ -37,6 +50,8 @@ int __usleep(useconds_t usec) {
             if (status & 0x20)
                 break;
         }
+
+        putchar('x');
 
         unsigned int chunk = divisor > 65535 ? 65535 : divisor;
 
