@@ -80,15 +80,15 @@ void option(char *str)
     }
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     int x, i;
 
-    for (i = 1; i < argc; ++i) {
-        if (*argv[i] == '-') {
-            option(argv[i] + 1);
-        }
-    }
+    /* for (i = 1; i < argc; ++i) { */
+    /*     if (*argv[i] == '-') { */
+    /*         option(argv[i] + 1); */
+    /*     } */
+    /* } */
     initscr();
     signal(SIGINT, SIG_IGN);
     noecho();

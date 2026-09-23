@@ -12,17 +12,6 @@ static inline unsigned char inb(unsigned short port) {
     return ret;
 }
 
-static unsigned int CURSOR = 0;
-
-void putchar(const char c) {
-    int y = CURSOR / 80; 
-    int x = CURSOR % 80; 
-  
-    mvaddch(y, x, c); 
-  
-    CURSOR += 1;
-  }
-
 int __usleep(useconds_t usec) {
     /*
      *
@@ -50,8 +39,6 @@ int __usleep(useconds_t usec) {
             if (status & 0x20)
                 break;
         }
-
-        putchar('x');
 
         unsigned int chunk = divisor > 65535 ? 65535 : divisor;
 
