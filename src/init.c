@@ -1,11 +1,19 @@
 #include <curses.h>
-
 #include <unistd.h>
+#include <stddef.h>
+
+#include <sl.h>
 
 void init(void) {
-    initscr();
+    char *args[] = { "prog", NULL };
 
-    usleep(10000000);
+    while (1) {
+        main(1, args);
+    }
+
+    /* initscr(); */
+
+    /* usleep(10000000); */
 
     // mvaddch(0, 0,  'W');
     // mvaddch(0, 1,  'e');
